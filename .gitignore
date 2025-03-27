@@ -1,5 +1,19 @@
-HELP.md
+
 target/
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+lib/
+
+/.idea
+/.out
+*.class
+/.com
+/.company
+/.udemy
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -12,12 +26,31 @@ target/
 .settings
 .springBeans
 .sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
 *.iws
 *.iml
 *.ipr
+.idea
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,6 +61,20 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+build/
 
 ### VS Code ###
 .vscode/
+
+### Mac OS ###
+.DS_Store
+
+### Gradle ###
+.gradle
+
+### Allure ###
+.allure
+
+*~
+lib/
+.run/
