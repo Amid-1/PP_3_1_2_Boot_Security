@@ -33,7 +33,7 @@
 </table>
 
 <h3>Добавить пользователя</h3>
-<form th:action="@{/admin/save}" method="post" th:object="${userDto}">
+<form th:action="@{/admin/save}" method="post" th:object="${userForm}">
     <input type="text" th:field="*{username}" placeholder="Имя пользователя"/>
     <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
 
@@ -46,8 +46,12 @@
     <input type="password" th:field="*{password}" placeholder="Пароль"/>
     <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
 
+    <label>Роли:</label>
     <select multiple th:field="*{roleIds}">
-        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+        <option th:each="role : ${roles}"
+                th:value="${role.id}"
+                th:text="${role.name}">
+        </option>
     </select>
 
     <br><input type="submit" value="Добавить"/>

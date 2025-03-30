@@ -30,21 +30,22 @@ public class UserController {
     @GetMapping
     public String listUsers(Model model) {
         model.addAttribute("userDtos", userService.getAllUsers());
-        model.addAttribute("userDto", new UserDto()); // <--- вот это важно
+        model.addAttribute("userForm", new UserFormCreateDto());
         model.addAttribute("roles", roleRepository.findAll());
         return "users";
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("userDto") @Valid UserFormCreateDto userDto,
+    public String saveUser(@ModelAttribute("userForm") @Valid UserFormCreateDto userForm,
                            BindingResult result,
                            Model model) {
         if (result.hasErrors()) {
             model.addAttribute("userDtos", userService.getAllUsers());
             model.addAttribute("roles", roleRepository.findAll());
+            model.addAttribute("userForm", userForm);
             return "users";
         }
-        userService.createUser(userDto);
+        userService.createUser(userForm);
         return "redirect:/admin";
     }
 

@@ -4,6 +4,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -75,6 +76,16 @@ public class UserFormCreateDto {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    private List<Long> roleIds;
+
+    public List<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
     }
 
     @Override
