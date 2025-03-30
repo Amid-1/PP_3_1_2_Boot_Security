@@ -1,9 +1,12 @@
+-- roles
+INSERT INTO roles (id, name) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO roles (id, name) VALUES (2, 'ROLE_USER');
 
-INSERT INTO roles(name) VALUES ('ROLE_USER'), ('ROLE_ADMIN');
+-- users
+INSERT INTO users (id, username, last_name, email, password) VALUES
+                                                                 (1, 'Иван', 'Иванов', 'admin@mail.com', '$2a$10$dBw8TifldjajFkO76VkpneeNJifjAmL07DOolK67/yGs88A7K9tvO'),
+                                                                 (2, 'Петр', 'Петров', 'user@mail.com', '$2a$10$6MEUFxJrRq4pPINjq6EkJ.LCKFm1PUBbz.DamL/AwMIi4pIA0m/E.');
 
-INSERT INTO users(username, last_name, email, password) VALUES
-('Admin', 'Root', 'admin@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEaOaO9Y/LTcSKmM7rIu9Q6Ac9G6'); -- пароль: admin
-
-INSERT INTO users_roles(user_id, role_id) VALUES
-(1, 1), -- Admin как USER
-(1, 2); -- Admin как ADMIN
+-- users_roles
+INSERT INTO users_roles (user_id, role_id) VALUES (1, 1);
+INSERT INTO users_roles (user_id, role_id) VALUES (2, 2);

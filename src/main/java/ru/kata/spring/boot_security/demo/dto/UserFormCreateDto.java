@@ -1,17 +1,33 @@
 package ru.kata.spring.boot_security.demo.dto;
 
+import ru.kata.spring.boot_security.demo.model.Role;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 
-public class UserDto {
+public class UserFormCreateDto {
     private Long id;
-    private String username;
-    private String lastName;
-    private String email;
-    private String password;
-    private Set<Long> roleIds;
 
-    public UserDto() {}
+    @NotBlank(message = "Имя не может быть пустым")
+    private String username;
+
+    @NotBlank(message = "Фамилия не может быть пустой")
+    private String lastName;
+
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Некорректный email")
+    private String email;
+
+    @NotBlank(message = "Пароль обязателен")
+    @Size(min = 3, message = "Пароль должен быть не менее 3 символов")
+    private String password;
+
+    private Set<Role> roles;
+
+    public UserFormCreateDto() {
+    }
 
     public Long getId() {
         return id;
@@ -53,20 +69,20 @@ public class UserDto {
         this.password = password;
     }
 
-    public Set<Long> getRoleIds() {
-        return roleIds;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoleIds(Set<Long> roleIds) {
-        this.roleIds = roleIds;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserDto)) return false;
-        UserDto userDto = (UserDto) o;
-        return Objects.equals(id, userDto.id);
+        if (o == null || getClass() != o.getClass()) return false;
+        UserFormCreateDto that = (UserFormCreateDto) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

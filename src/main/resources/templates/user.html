@@ -3,18 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Личный кабинет</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            background-color: #f9f9f9;
+        }
+        .logout-btn {
+            margin-top: 20px;
+        }
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Добро пожаловать, <span th:text="${user.username}">[Имя]</span>!</h2>
-<p>Email: <span th:text="${user.email}">[email]</span></p>
-<p>Фамилия: <span th:text="${user.lastName}">[Фамилия]</span></p>
-<p>Роли: <span th:text="${user.roles}">[Роли]</span></p>
+<div class="card">
+    <h2>Добро пожаловать, <span th:text="${user.username}">[Имя]</span>!</h2>
+    <p><strong>Фамилия:</strong> <span th:text="${user.lastName}">[Фамилия]</span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}">[email]</span></p>
+    <p><strong>Роли:</strong></p>
+    <ul>
+        <li th:each="role : ${user.roles}"
+            th:text="${#strings.replace(role.name, 'ROLE_', '')}">[Роль]</li>
+    </ul>
 
-<!-- 👇 Форма выхода -->
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Выйти</button>
-</form>
+    <form th:action="@{/logout}" method="post" class="logout-btn">
+        <button type="submit">Выйти</button>
+    </form>
+</div>
 
 </body>
 </html>

@@ -1,52 +1,79 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dto.UserDto;
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.dto.*;
+import ru.kata.spring.boot_security.demo.mapper.UserMapper;
+import ru.kata.spring.boot_security.demo.model.AppUser;
+import ru.kata.spring.boot_security.demo.model.Role;
+import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           BCryptPasswordEncoder passwordEncoder,
+                           UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(user -> new UserDto(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getPassword()
-                ))
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
+    public UserDto getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + id + " не найден"));
+    }
+
+    @Override
+    public UserFormDto getUserFormById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toFormDto)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + id + " не найден"));
+    }
+
+    @Override
     @Transactional
-    public void saveUser(UserDto userDto) {
-        User user;
-        if (userDto.getId() != null) {
-            user = userRepository.findById(userDto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + userDto.getId() + " не найден"));
-        } else {
-            user = new User();
+    public void createUser(UserFormCreateDto dto) {
+        AppUser user = userMapper.fromCreateDto(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(UserFormUpdateDto dto) {
+        AppUser existingUser = userRepository.findById(dto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+
+        AppUser updatedUser = userMapper.fromUpdateDto(dto, existingUser);
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            updatedUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
-        user.setUsername(userDto.getUsername());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-
-        userRepository.save(user);
+        userRepository.save(updatedUser);
     }
 
     @Override
@@ -58,15 +85,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Long id) {
-        return userRepository.findById(id)
-                .map(user -> new UserDto(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getPassword()
-                ))
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + id + " не найден"));
+    @Transactional
+    public void register(UserFormDto dto) {
+        AppUser user = userMapper.fromFormDto(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Role role = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
+        user.setRoles(Set.of(role));
+
+        userRepository.save(user);
     }
 }
