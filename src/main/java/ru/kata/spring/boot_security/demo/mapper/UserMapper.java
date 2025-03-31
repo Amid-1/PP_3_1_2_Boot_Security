@@ -8,8 +8,7 @@ import ru.kata.spring.boot_security.demo.dto.UserFormUpdateDto;
 import ru.kata.spring.boot_security.demo.model.AppUser;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -42,7 +41,7 @@ public class UserMapper {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setPassword(user.getPassword());
-        dto.setRoles(user.getRoles());
+        dto.setRoleIds(toRoleIds(user.getRoles()));
         return dto;
     }
 
@@ -55,7 +54,7 @@ public class UserMapper {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setRoles(dto.getRoles());
+        user.setRoles(fromRoleIds(dto.getRoleIds()));
         return user;
     }
 
@@ -65,7 +64,7 @@ public class UserMapper {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setRoles(dto.getRoles());
+        user.setRoles(fromRoleIds(dto.getRoleIds()));
         return user;
     }
 
@@ -75,10 +74,10 @@ public class UserMapper {
         existingUser.setEmail(dto.getEmail());
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            existingUser.setPassword(dto.getPassword()); // Шифруем позже
+            existingUser.setPassword(dto.getPassword());
         }
 
-        existingUser.setRoles(dto.getRoles());
+        existingUser.setRoles(fromRoleIds(dto.getRoleIds()));
         return existingUser;
     }
 
@@ -88,18 +87,18 @@ public class UserMapper {
         dto.setUsername(userDto.getUsername());
         dto.setLastName(userDto.getLastName());
         dto.setEmail(userDto.getEmail());
-        dto.setRoles(fromRoleIds(userDto.getRoleIds()));
+        dto.setRoleIds(userDto.getRoleIds());
         return dto;
     }
 
-    private Set<Long> toRoleIds(Set<Role> roles) {
+    private List<Long> toRoleIds(Set<Role> roles) {
         if (roles == null) return null;
         return roles.stream()
                 .map(Role::getId)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    private Set<Role> fromRoleIds(Set<Long> roleIds) {
+    private Set<Role> fromRoleIds(Collection<Long> roleIds) {
         if (roleIds == null) return null;
         return new HashSet<>(roleRepository.findAllById(roleIds));
     }

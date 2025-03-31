@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.mapper.UserMapper;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -89,7 +90,13 @@ public class UserController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("userDto", new UserFormDto());
+        UserFormDto dto = new UserFormDto();
+        roleRepository.findByName("ROLE_USER").ifPresent(role ->
+                dto.setRoleIds(List.of(role.getId()))
+        );
+
+        model.addAttribute("userDto", dto);
+        model.addAttribute("roles", roleRepository.findAll());
         return "register";
     }
 

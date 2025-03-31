@@ -1,10 +1,9 @@
 package ru.kata.spring.boot_security.demo.dto;
 
-import ru.kata.spring.boot_security.demo.model.Role;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class UserFormUpdateDto {
     private Long id;
@@ -19,9 +18,9 @@ public class UserFormUpdateDto {
     @Email(message = "Некорректный email")
     private String email;
 
-    private String password; // Необязателен
+    private String password; // необязателен
 
-    private Set<Role> roles;
+    private List<Long> roleIds;
 
     public UserFormUpdateDto() {
     }
@@ -66,18 +65,18 @@ public class UserFormUpdateDto {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public List<Long> getRoleIds() {
+        return roleIds;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof UserFormUpdateDto)) return false;
         UserFormUpdateDto that = (UserFormUpdateDto) o;
         return Objects.equals(id, that.id);
     }
@@ -87,4 +86,3 @@ public class UserFormUpdateDto {
         return Objects.hash(id);
     }
 }
-

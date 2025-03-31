@@ -29,12 +29,11 @@
     <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p><br>
 
     <label>Роли:</label>
-    <select multiple th:field="*{roles}">
+    <select multiple th:field="*{roleIds}">
         <option th:each="role : ${roles}"
                 th:value="${role.id}"
-                th:text="${role.name}">
-        </option>
-    </select><br>
+                th:text="${#strings.replace(role.name, 'ROLE_', '')}">Роль</option>
+    </select>
 
     <button type="submit">Сохранить</button>
 </form>
