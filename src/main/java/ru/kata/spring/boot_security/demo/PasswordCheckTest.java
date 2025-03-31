@@ -4,13 +4,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class PasswordCheckTest {
     public static void main(String[] args) {
-        // 👉 Зашифрованный пароль из базы
+
         String encodedPasswordFromDB = "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEaOaO9Y/LTcSKmM7rIu9Q6Ac9G6";
 
-        // 👉 Введённый пользователем пароль (например, в login form)
         String rawPassword = "admin";
 
-        // Проверка
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         boolean matches = encoder.matches(rawPassword, encodedPasswordFromDB);
 

@@ -8,7 +8,6 @@ import ru.kata.spring.boot_security.demo.dto.*;
 import ru.kata.spring.boot_security.demo.mapper.UserMapper;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
 import javax.validation.Valid;
 
 @Controller

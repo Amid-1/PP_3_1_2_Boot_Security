@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.AppUser;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         AppUser appUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
-        // Возвращаем объект User, который используется Spring Security для аутентификации
         List<GrantedAuthority> authorities = appUser.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());

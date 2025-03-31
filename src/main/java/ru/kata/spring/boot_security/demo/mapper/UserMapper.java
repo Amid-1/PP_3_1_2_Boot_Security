@@ -8,7 +8,6 @@ import ru.kata.spring.boot_security.demo.dto.UserFormUpdateDto;
 import ru.kata.spring.boot_security.demo.model.AppUser;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -92,8 +91,6 @@ public class UserMapper {
         dto.setRoles(fromRoleIds(userDto.getRoleIds()));
         return dto;
     }
-
-    // Вспомогательные методы
 
     private Set<Long> toRoleIds(Set<Role> roles) {
         if (roles == null) return null;
