@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ErrorController {
 
-    @RequestMapping("/custom-error")  // Измените URL на другой
+    @RequestMapping("/custom-error")
     public String handleError(HttpServletRequest request) {
 
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);

@@ -18,7 +18,7 @@ public class PersonalController {
 
     @GetMapping("/user")
     public String userHome(Authentication authentication, Model model) {
-        String email = authentication.getName(); // т.к. email используется как login
+        String email = authentication.getName();
         AppUser appUser = userRepository.findByEmail(email).orElse(null);
         model.addAttribute("user", appUser);
         return "user";
