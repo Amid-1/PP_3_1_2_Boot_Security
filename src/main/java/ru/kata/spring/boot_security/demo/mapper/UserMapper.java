@@ -5,11 +5,14 @@ import ru.kata.spring.boot_security.demo.dto.UserDto;
 import ru.kata.spring.boot_security.demo.dto.UserFormCreateDto;
 import ru.kata.spring.boot_security.demo.dto.UserFormDto;
 import ru.kata.spring.boot_security.demo.dto.UserFormUpdateDto;
-import ru.kata.spring.boot_security.demo.model.AppUser;
+import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import java.util.*;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class UserMapper {
@@ -20,7 +23,7 @@ public class UserMapper {
         this.roleRepository = roleRepository;
     }
 
-    public UserDto toDto(AppUser user) {
+    public UserDto toDto(User user) {
         if (user == null) return null;
 
         UserDto dto = new UserDto();
@@ -32,7 +35,7 @@ public class UserMapper {
         return dto;
     }
 
-    public UserFormDto toFormDto(AppUser user) {
+    public UserFormDto toFormDto(User user) {
         if (user == null) return null;
 
         UserFormDto dto = new UserFormDto();
@@ -45,10 +48,10 @@ public class UserMapper {
         return dto;
     }
 
-    public AppUser fromFormDto(UserFormDto dto) {
+    public User fromFormDto(UserFormDto dto) {
         if (dto == null) return null;
 
-        AppUser user = new AppUser();
+        User user = new User();
         user.setId(dto.getId());
         user.setUsername(dto.getUsername());
         user.setLastName(dto.getLastName());
@@ -58,8 +61,8 @@ public class UserMapper {
         return user;
     }
 
-    public AppUser fromCreateDto(UserFormCreateDto dto) {
-        AppUser user = new AppUser();
+    public User fromCreateDto(UserFormCreateDto dto) {
+        User user = new User();
         user.setUsername(dto.getUsername());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -68,7 +71,7 @@ public class UserMapper {
         return user;
     }
 
-    public AppUser fromUpdateDto(UserFormUpdateDto dto, AppUser existingUser) {
+    public User fromUpdateDto(UserFormUpdateDto dto, User existingUser) {
         existingUser.setUsername(dto.getUsername());
         existingUser.setLastName(dto.getLastName());
         existingUser.setEmail(dto.getEmail());

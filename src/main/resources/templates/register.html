@@ -1,3 +1,4 @@
+<!-- register.html -->
 <h2>Регистрация</h2>
 <form th:action="@{/admin/register}" method="post" th:object="${userDto}">
     <input type="text" th:field="*{username}" placeholder="Имя пользователя"/><br>

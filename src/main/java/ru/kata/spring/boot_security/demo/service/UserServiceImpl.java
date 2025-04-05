@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dto.*;
 import ru.kata.spring.boot_security.demo.mapper.UserMapper;
-import ru.kata.spring.boot_security.demo.model.AppUser;
+import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Set;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createUser(UserFormCreateDto dto) {
-        AppUser user = userMapper.fromCreateDto(dto);
+        User user = userMapper.fromCreateDto(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -64,10 +64,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(UserFormUpdateDto dto) {
-        AppUser existingUser = userRepository.findById(dto.getId())
+        User existingUser = userRepository.findById(dto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
 
-        AppUser updatedUser = userMapper.fromUpdateDto(dto, existingUser);
+        User updatedUser = userMapper.fromUpdateDto(dto, existingUser);
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             updatedUser.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void register(UserFormDto dto) {
-        AppUser user = userMapper.fromFormDto(dto);
+        User user = userMapper.fromFormDto(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role role = roleRepository.findByName("ROLE_USER")
